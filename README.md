@@ -38,5 +38,5 @@ Modify each parameter for your Cisco ASAv deployment in MS Azure.
             "defaultValue": "(your ASAv SG name)",
 
 	"osProfile": {
-		        "adminUsername": "(ASAv login username)",
+	    "adminUsername": "(ASAv login username)",
             "adminPassword": "(ASAv login password)",

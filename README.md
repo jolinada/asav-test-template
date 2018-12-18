@@ -13,7 +13,7 @@ Modify each parameter for your Cisco ASAv deployment in MS Azure.
 
 	"virtualNetworks_vnet01_name": {
             "defaultValue": "(your VNET name)", 
-							"addressSpace": {
+		"addressSpace": {
                     "addressPrefixes": [
                         "(your VNET IP address prefix : "10.1.0.0/16")"
 												
@@ -25,8 +25,8 @@ Modify each parameter for your Cisco ASAv deployment in MS Azure.
 
 	"networkInterfaces_ASAv_01_Nic[0-3]_name": {
             "defaultValue": "(your ASAv Nic[0-3] name)",
-							"privateIPAddress": "(your ASAv Nic[0-3] IP address : "10.1.0.4")"
-							"addressPrefix": "(your ASAv Nic[0-3] IP address prefix : 10.1.0.0/24")",
+		"privateIPAddress": "(your ASAv Nic[0-3] IP address : "10.1.0.4")"
+		"addressPrefix": "(your ASAv Nic[0-3] IP address prefix : 10.1.0.0/24")",
 
 	"routeTables_(interface name)_ASAv_RouteTable_name": {
             "defaultValue": "(your ASAv Route Table name)",

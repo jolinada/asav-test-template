@@ -1,0 +1,845 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "virtualNetworks_vnet01_name": {
+            "defaultValue": "vnet02",
+            "type": "String"
+        },
+        "virtualMachines_ASAv_01_name": {
+            "defaultValue": "ASAv-02",
+            "type": "String"
+        },
+        "storageAccounts_shkimura_name": {
+            "defaultValue": "shkimura",
+            "type": "String"
+        },
+        "publicIPAddresses_PIP_001_name": {
+            "defaultValue": "PIP-002",
+            "type": "String"
+        },
+        "networkInterfaces_ASAv_01_Nic0_name": {
+            "defaultValue": "ASAv-02-Nic0",
+            "type": "String"
+        },
+        "networkInterfaces_ASAv_01_Nic1_name": {
+            "defaultValue": "ASAv-02-Nic1",
+            "type": "String"
+        },
+        "networkInterfaces_ASAv_01_Nic2_name": {
+            "defaultValue": "ASAv-02-Nic2",
+            "type": "String"
+        },
+        "networkInterfaces_ASAv_01_Nic3_name": {
+            "defaultValue": "ASAv-02-Nic3",
+            "type": "String"
+        },
+        "routeTables_dmz1_ASAv_RouteTable_name": {
+            "defaultValue": "dmz1-ASAv02-RouteTable",
+            "type": "String"
+        },
+        "routeTables_dmz2_ASAv_RouteTable_name": {
+            "defaultValue": "dmz2-ASAv02-RouteTable",
+            "type": "String"
+        },
+        "routeTables_inside_ASAv_RouteTable_name": {
+            "defaultValue": "inside-ASAv02-RouteTable",
+            "type": "String"
+        },
+        "subnets_dmz1_name": {
+            "defaultValue": "dmz1",
+            "type": "String"
+        },
+        "subnets_dmz2_name": {
+            "defaultValue": "dmz2",
+            "type": "String"
+        },
+        "subnets_inside_name": {
+            "defaultValue": "inside",
+            "type": "String"
+        },
+        "routeTables_management_ASAv_RouteTable_name": {
+            "defaultValue": "management-ASAv02-RouteTable",
+            "type": "String"
+        },
+        "subnets_management_name": {
+            "defaultValue": "management",
+            "type": "String"
+        },
+        "networkSecurityGroups_ASAv_01_SecurityGroup_name": {
+            "defaultValue": "ASAv-02-SecurityGroup",
+            "type": "String"
+        },
+        "securityRules_SSH_Rule_name": {
+            "defaultValue": "SSH-Rule",
+            "type": "String"
+        },
+        "securityRules_UDP_Rule1_name": {
+            "defaultValue": "UDP-Rule1",
+            "type": "String"
+        },
+        "securityRules_UDP_Rule2_name": {
+            "defaultValue": "UDP-Rule2",
+            "type": "String"
+        }
+    },
+    "variables": {},
+    "resources": [
+        {
+            "type": "Microsoft.Compute/virtualMachines",
+            "name": "[parameters('virtualMachines_ASAv_01_name')]",
+            "apiVersion": "2018-06-01",
+            "location": "japaneast",
+            "plan": {
+                "name": "asav-azure-byol",
+                "product": "cisco-asav",
+                "publisher": "cisco"
+            },
+            "scale": null,
+            "properties": {
+                "hardwareProfile": {
+                    "vmSize": "Standard_D3_v2"
+                },
+                "storageProfile": {
+                    "imageReference": {
+                        "publisher": "cisco",
+                        "offer": "cisco-asav",
+                        "sku": "asav-azure-byol",
+                        "version": "910.1.0"
+                    },
+                    "osDisk": {
+                        "osType": "Linux",
+                        "name": "[concat(parameters('virtualMachines_ASAv_01_name'),'-disk')]",
+                        "createOption": "FromImage",
+                        "vhd": {
+                            "uri": "[concat('https', '://', parameters('storageAccounts_shkimura_name'), '.blob.core.windows.net', concat('/vhds/', parameters('virtualMachines_ASAv_01_name'),'-disk.vhd'))]"
+                        },
+                        "caching": "ReadWrite",
+                        "diskSizeGB": 9
+                    },
+                    "dataDisks": []
+                },
+                "osProfile": {
+                    "computerName": "[parameters('virtualMachines_ASAv_01_name')]",
+                    "adminUsername": "shkimura",
+                    "adminPassword": "C1sc0^&123**",
+                    "linuxConfiguration": {
+                        "disablePasswordAuthentication": false,
+                        "provisionVMAgent": true
+                    },
+                    "secrets": [],
+                    "allowExtensionOperations": true
+                },
+                "networkProfile": {
+                    "networkInterfaces": [
+                        {
+                            "id": "[resourceId('Microsoft.Network/networkInterfaces', parameters('networkInterfaces_ASAv_01_Nic0_name'))]",
+                            "properties": {
+                                "primary": true
+                            }
+                        },
+                        {
+                            "id": "[resourceId('Microsoft.Network/networkInterfaces', parameters('networkInterfaces_ASAv_01_Nic1_name'))]",
+                            "properties": {
+                                "primary": false
+                            }
+                        },
+                        {
+                            "id": "[resourceId('Microsoft.Network/networkInterfaces', parameters('networkInterfaces_ASAv_01_Nic2_name'))]",
+                            "properties": {
+                                "primary": false
+                            }
+                        },
+                        {
+                            "id": "[resourceId('Microsoft.Network/networkInterfaces', parameters('networkInterfaces_ASAv_01_Nic3_name'))]",
+                            "properties": {
+                                "primary": false
+                            }
+                        }
+                    ]
+                },
+                "diagnosticsProfile": {
+                    "bootDiagnostics": {
+                        "enabled": true,
+                        "storageUri": "[concat('https', '://', parameters('storageAccounts_shkimura_name'), '.blob.core.windows.net', '/')]"
+                    }
+                }
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_shkimura_name'))]",
+                "[resourceId('Microsoft.Network/networkInterfaces', parameters('networkInterfaces_ASAv_01_Nic0_name'))]",
+                "[resourceId('Microsoft.Network/networkInterfaces', parameters('networkInterfaces_ASAv_01_Nic1_name'))]",
+                "[resourceId('Microsoft.Network/networkInterfaces', parameters('networkInterfaces_ASAv_01_Nic2_name'))]",
+                "[resourceId('Microsoft.Network/networkInterfaces', parameters('networkInterfaces_ASAv_01_Nic3_name'))]"
+            ]
+        },
+        {
+            "type": "Microsoft.Network/networkInterfaces",
+            "name": "[parameters('networkInterfaces_ASAv_01_Nic0_name')]",
+            "apiVersion": "2018-08-01",
+            "location": "japaneast",
+            "scale": null,
+            "properties": {
+                "provisioningState": "Succeeded",
+                "ipConfigurations": [
+                    {
+                        "name": "ipconfig1",
+                        "properties": {
+                            "provisioningState": "Succeeded",
+                            "privateIPAddress": "10.1.0.4",
+                            "privateIPAllocationMethod": "Static",
+                            "publicIPAddress": {
+                                "id": "[resourceId('Microsoft.Network/publicIPAddresses', parameters('publicIPAddresses_PIP_001_name'))]"
+                            },
+                            "subnet": {
+                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_vnet01_name'), parameters('subnets_management_name'))]"
+                            },
+                            "primary": true,
+                            "privateIPAddressVersion": "IPv4"
+                        }
+                    }
+                ],
+                "dnsSettings": {
+                    "dnsServers": [],
+                    "appliedDnsServers": [],
+                    "internalDomainNameSuffix": "wo3advtjgj4uxnxhd5thbpv1bb.lx.internal.cloudapp.net"
+                },
+                "enableAcceleratedNetworking": false,
+                "enableIPForwarding": true,
+                "networkSecurityGroup": {
+                    "id": "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroups_ASAv_01_SecurityGroup_name'))]"
+                },
+                "primary": true,
+                "tapConfigurations": []
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/publicIPAddresses', parameters('publicIPAddresses_PIP_001_name'))]",
+                "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_vnet01_name'), parameters('subnets_management_name'))]",
+                "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroups_ASAv_01_SecurityGroup_name'))]"
+            ]
+        },
+        {
+            "type": "Microsoft.Network/networkInterfaces",
+            "name": "[parameters('networkInterfaces_ASAv_01_Nic1_name')]",
+            "apiVersion": "2018-08-01",
+            "location": "japaneast",
+            "scale": null,
+            "properties": {
+                "provisioningState": "Succeeded",
+                "ipConfigurations": [
+                    {
+                        "name": "ipconfig1",
+                        "properties": {
+                            "provisioningState": "Succeeded",
+                            "privateIPAddress": "10.1.1.4",
+                            "privateIPAllocationMethod": "Static",
+                            "subnet": {
+                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_vnet01_name'), parameters('subnets_inside_name'))]"
+                            },
+                            "primary": true,
+                            "privateIPAddressVersion": "IPv4"
+                        }
+                    }
+                ],
+                "dnsSettings": {
+                    "dnsServers": [],
+                    "appliedDnsServers": [],
+                    "internalDomainNameSuffix": "wo3advtjgj4uxnxhd5thbpv1bb.lx.internal.cloudapp.net"
+                },
+                "enableAcceleratedNetworking": false,
+                "enableIPForwarding": true,
+                "primary": false,
+                "tapConfigurations": []
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_vnet01_name'), parameters('subnets_inside_name'))]"
+            ]
+        },
+        {
+            "type": "Microsoft.Network/networkInterfaces",
+            "name": "[parameters('networkInterfaces_ASAv_01_Nic2_name')]",
+            "apiVersion": "2018-08-01",
+            "location": "japaneast",
+            "scale": null,
+            "properties": {
+                "provisioningState": "Succeeded",
+                "ipConfigurations": [
+                    {
+                        "name": "ipconfig1",
+                        "properties": {
+                            "provisioningState": "Succeeded",
+                            "privateIPAddress": "10.1.2.4",
+                            "privateIPAllocationMethod": "Static",
+                            "subnet": {
+                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_vnet01_name'), parameters('subnets_dmz1_name'))]"
+                            },
+                            "primary": true,
+                            "privateIPAddressVersion": "IPv4"
+                        }
+                    }
+                ],
+                "dnsSettings": {
+                    "dnsServers": [],
+                    "appliedDnsServers": [],
+                    "internalDomainNameSuffix": "wo3advtjgj4uxnxhd5thbpv1bb.lx.internal.cloudapp.net"
+                },
+                "enableAcceleratedNetworking": false,
+                "enableIPForwarding": true,
+                "primary": false,
+                "tapConfigurations": []
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_vnet01_name'), parameters('subnets_dmz1_name'))]"
+            ]
+        },
+        {
+            "type": "Microsoft.Network/networkInterfaces",
+            "name": "[parameters('networkInterfaces_ASAv_01_Nic3_name')]",
+            "apiVersion": "2018-08-01",
+            "location": "japaneast",
+            "scale": null,
+            "properties": {
+                "provisioningState": "Succeeded",
+                "ipConfigurations": [
+                    {
+                        "name": "ipconfig1",
+                        "properties": {
+                            "provisioningState": "Succeeded",
+                            "privateIPAddress": "10.1.3.4",
+                            "privateIPAllocationMethod": "Static",
+                            "subnet": {
+                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_vnet01_name'), parameters('subnets_dmz2_name'))]"
+                            },
+                            "primary": true,
+                            "privateIPAddressVersion": "IPv4"
+                        }
+                    }
+                ],
+                "dnsSettings": {
+                    "dnsServers": [],
+                    "appliedDnsServers": [],
+                    "internalDomainNameSuffix": "wo3advtjgj4uxnxhd5thbpv1bb.lx.internal.cloudapp.net"
+                },
+                "enableAcceleratedNetworking": false,
+                "enableIPForwarding": true,
+                "primary": false,
+                "tapConfigurations": []
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_vnet01_name'), parameters('subnets_dmz2_name'))]"
+            ]
+        },
+        {
+            "type": "Microsoft.Network/networkSecurityGroups",
+            "name": "[parameters('networkSecurityGroups_ASAv_01_SecurityGroup_name')]",
+            "apiVersion": "2018-08-01",
+            "location": "japaneast",
+            "scale": null,
+            "properties": {
+                "provisioningState": "Succeeded",
+                "securityRules": [
+                    {
+                        "name": "SSH-Rule",
+                        "properties": {
+                            "provisioningState": "Succeeded",
+                            "description": "Allow SSH",
+                            "protocol": "Tcp",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "22",
+                            "sourceAddressPrefix": "*",
+                            "destinationAddressPrefix": "*",
+                            "access": "Allow",
+                            "priority": 100,
+                            "direction": "Inbound",
+                            "sourcePortRanges": [],
+                            "destinationPortRanges": [],
+                            "sourceAddressPrefixes": [],
+                            "destinationAddressPrefixes": []
+                        }
+                    },
+                    {
+                        "name": "UDP-Rule1",
+                        "properties": {
+                            "provisioningState": "Succeeded",
+                            "description": "Allow UDP",
+                            "protocol": "Udp",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "500",
+                            "sourceAddressPrefix": "*",
+                            "destinationAddressPrefix": "*",
+                            "access": "Allow",
+                            "priority": 101,
+                            "direction": "Inbound",
+                            "sourcePortRanges": [],
+                            "destinationPortRanges": [],
+                            "sourceAddressPrefixes": [],
+                            "destinationAddressPrefixes": []
+                        }
+                    },
+                    {
+                        "name": "UDP-Rule2",
+                        "properties": {
+                            "provisioningState": "Succeeded",
+                            "description": "Allow UDP",
+                            "protocol": "Udp",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "4500",
+                            "sourceAddressPrefix": "*",
+                            "destinationAddressPrefix": "*",
+                            "access": "Allow",
+                            "priority": 102,
+                            "direction": "Inbound",
+                            "sourcePortRanges": [],
+                            "destinationPortRanges": [],
+                            "sourceAddressPrefixes": [],
+                            "destinationAddressPrefixes": []
+                        }
+                    }
+                ],
+                "defaultSecurityRules": [
+                    {
+                        "name": "AllowVnetInBound",
+                        "properties": {
+                            "provisioningState": "Succeeded",
+                            "description": "Allow inbound traffic from all VMs in VNET",
+                            "protocol": "*",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "*",
+                            "sourceAddressPrefix": "VirtualNetwork",
+                            "destinationAddressPrefix": "VirtualNetwork",
+                            "access": "Allow",
+                            "priority": 65000,
+                            "direction": "Inbound",
+                            "sourcePortRanges": [],
+                            "destinationPortRanges": [],
+                            "sourceAddressPrefixes": [],
+                            "destinationAddressPrefixes": []
+                        }
+                    },
+                    {
+                        "name": "AllowAzureLoadBalancerInBound",
+                        "properties": {
+                            "provisioningState": "Succeeded",
+                            "description": "Allow inbound traffic from azure load balancer",
+                            "protocol": "*",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "*",
+                            "sourceAddressPrefix": "AzureLoadBalancer",
+                            "destinationAddressPrefix": "*",
+                            "access": "Allow",
+                            "priority": 65001,
+                            "direction": "Inbound",
+                            "sourcePortRanges": [],
+                            "destinationPortRanges": [],
+                            "sourceAddressPrefixes": [],
+                            "destinationAddressPrefixes": []
+                        }
+                    },
+                    {
+                        "name": "DenyAllInBound",
+                        "properties": {
+                            "provisioningState": "Succeeded",
+                            "description": "Deny all inbound traffic",
+                            "protocol": "*",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "*",
+                            "sourceAddressPrefix": "*",
+                            "destinationAddressPrefix": "*",
+                            "access": "Deny",
+                            "priority": 65500,
+                            "direction": "Inbound",
+                            "sourcePortRanges": [],
+                            "destinationPortRanges": [],
+                            "sourceAddressPrefixes": [],
+                            "destinationAddressPrefixes": []
+                        }
+                    },
+                    {
+                        "name": "AllowVnetOutBound",
+                        "properties": {
+                            "provisioningState": "Succeeded",
+                            "description": "Allow outbound traffic from all VMs to all VMs in VNET",
+                            "protocol": "*",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "*",
+                            "sourceAddressPrefix": "VirtualNetwork",
+                            "destinationAddressPrefix": "VirtualNetwork",
+                            "access": "Allow",
+                            "priority": 65000,
+                            "direction": "Outbound",
+                            "sourcePortRanges": [],
+                            "destinationPortRanges": [],
+                            "sourceAddressPrefixes": [],
+                            "destinationAddressPrefixes": []
+                        }
+                    },
+                    {
+                        "name": "AllowInternetOutBound",
+                        "properties": {
+                            "provisioningState": "Succeeded",
+                            "description": "Allow outbound traffic from all VMs to Internet",
+                            "protocol": "*",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "*",
+                            "sourceAddressPrefix": "*",
+                            "destinationAddressPrefix": "Internet",
+                            "access": "Allow",
+                            "priority": 65001,
+                            "direction": "Outbound",
+                            "sourcePortRanges": [],
+                            "destinationPortRanges": [],
+                            "sourceAddressPrefixes": [],
+                            "destinationAddressPrefixes": []
+                        }
+                    },
+                    {
+                        "name": "DenyAllOutBound",
+                        "properties": {
+                            "provisioningState": "Succeeded",
+                            "description": "Deny all outbound traffic",
+                            "protocol": "*",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "*",
+                            "sourceAddressPrefix": "*",
+                            "destinationAddressPrefix": "*",
+                            "access": "Deny",
+                            "priority": 65500,
+                            "direction": "Outbound",
+                            "sourcePortRanges": [],
+                            "destinationPortRanges": [],
+                            "sourceAddressPrefixes": [],
+                            "destinationAddressPrefixes": []
+                        }
+                    }
+                ]
+            },
+            "dependsOn": []
+        },
+        {
+            "type": "Microsoft.Network/publicIPAddresses",
+            "sku": {
+                "name": "Basic",
+                "tier": "Regional"
+            },
+            "name": "[parameters('publicIPAddresses_PIP_001_name')]",
+            "apiVersion": "2018-08-01",
+            "location": "japaneast",
+            "scale": null,
+            "properties": {
+                "provisioningState": "Succeeded",
+                "publicIPAddressVersion": "IPv4",
+                "publicIPAllocationMethod": "Static",
+                "idleTimeoutInMinutes": 30,
+                "dnsSettings": {
+                    "domainNameLabel": "asav-02",
+                    "fqdn": "asav-02.japaneast.cloudapp.azure.com"
+                },
+                "ipTags": []
+            },
+            "dependsOn": []
+        },
+        {
+            "type": "Microsoft.Network/routeTables",
+            "name": "[parameters('routeTables_dmz1_ASAv_RouteTable_name')]",
+            "apiVersion": "2018-08-01",
+            "location": "japaneast",
+            "scale": null,
+            "properties": {
+                "provisioningState": "Succeeded",
+                "disableBgpRoutePropagation": false,
+                "routes": []
+            },
+            "dependsOn": []
+        },
+        {
+            "type": "Microsoft.Network/routeTables",
+            "name": "[parameters('routeTables_dmz2_ASAv_RouteTable_name')]",
+            "apiVersion": "2018-08-01",
+            "location": "japaneast",
+            "scale": null,
+            "properties": {
+                "provisioningState": "Succeeded",
+                "disableBgpRoutePropagation": false,
+                "routes": []
+            },
+            "dependsOn": []
+        },
+        {
+            "type": "Microsoft.Network/routeTables",
+            "name": "[parameters('routeTables_inside_ASAv_RouteTable_name')]",
+            "apiVersion": "2018-08-01",
+            "location": "japaneast",
+            "scale": null,
+            "properties": {
+                "provisioningState": "Succeeded",
+                "disableBgpRoutePropagation": false,
+                "routes": []
+            },
+            "dependsOn": []
+        },
+        {
+            "type": "Microsoft.Network/routeTables",
+            "name": "[parameters('routeTables_management_ASAv_RouteTable_name')]",
+            "apiVersion": "2018-08-01",
+            "location": "japaneast",
+            "scale": null,
+            "properties": {
+                "provisioningState": "Succeeded",
+                "disableBgpRoutePropagation": false,
+                "routes": []
+            },
+            "dependsOn": []
+        },
+        {
+            "type": "Microsoft.Network/virtualNetworks",
+            "name": "[parameters('virtualNetworks_vnet01_name')]",
+            "apiVersion": "2018-08-01",
+            "location": "japaneast",
+            "scale": null,
+            "properties": {
+                "provisioningState": "Succeeded",
+                "addressSpace": {
+                    "addressPrefixes": [
+                        "10.1.0.0/16"
+                    ]
+                },
+                "subnets": [
+                    {
+                        "name": "management",
+                        "properties": {
+                            "provisioningState": "Succeeded",
+                            "addressPrefix": "10.1.0.0/24",
+                            "routeTable": {
+                                "id": "[resourceId('Microsoft.Network/routeTables', parameters('routeTables_management_ASAv_RouteTable_name'))]"
+                            },
+                            "delegations": []
+                        }
+                    },
+                    {
+                        "name": "inside",
+                        "properties": {
+                            "provisioningState": "Succeeded",
+                            "addressPrefix": "10.1.1.0/24",
+                            "routeTable": {
+                                "id": "[resourceId('Microsoft.Network/routeTables', parameters('routeTables_inside_ASAv_RouteTable_name'))]"
+                            },
+                            "delegations": []
+                        }
+                    },
+                    {
+                        "name": "dmz1",
+                        "properties": {
+                            "provisioningState": "Succeeded",
+                            "addressPrefix": "10.1.2.0/24",
+                            "routeTable": {
+                                "id": "[resourceId('Microsoft.Network/routeTables', parameters('routeTables_dmz1_ASAv_RouteTable_name'))]"
+                            },
+                            "delegations": []
+                        }
+                    },
+                    {
+                        "name": "dmz2",
+                        "properties": {
+                            "provisioningState": "Succeeded",
+                            "addressPrefix": "10.1.3.0/24",
+                            "routeTable": {
+                                "id": "[resourceId('Microsoft.Network/routeTables', parameters('routeTables_dmz2_ASAv_RouteTable_name'))]"
+                            },
+                            "delegations": []
+                        }
+                    }
+                ],
+                "virtualNetworkPeerings": [],
+                "enableDdosProtection": false,
+                "enableVmProtection": false
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/routeTables', parameters('routeTables_management_ASAv_RouteTable_name'))]",
+                "[resourceId('Microsoft.Network/routeTables', parameters('routeTables_inside_ASAv_RouteTable_name'))]",
+                "[resourceId('Microsoft.Network/routeTables', parameters('routeTables_dmz1_ASAv_RouteTable_name'))]",
+                "[resourceId('Microsoft.Network/routeTables', parameters('routeTables_dmz2_ASAv_RouteTable_name'))]"
+            ]
+        },
+        {
+            "type": "Microsoft.Storage/storageAccounts",
+            "sku": {
+                "name": "Standard_LRS",
+                "tier": "Standard"
+            },
+            "kind": "Storage",
+            "name": "[parameters('storageAccounts_shkimura_name')]",
+            "apiVersion": "2018-07-01",
+            "location": "japaneast",
+            "tags": {},
+            "scale": null,
+            "properties": {
+                "networkAcls": {
+                    "bypass": "AzureServices",
+                    "virtualNetworkRules": [],
+                    "ipRules": [],
+                    "defaultAction": "Allow"
+                },
+                "supportsHttpsTrafficOnly": false,
+                "encryption": {
+                    "services": {
+                        "file": {
+                            "enabled": true
+                        },
+                        "blob": {
+                            "enabled": true
+                        }
+                    },
+                    "keySource": "Microsoft.Storage"
+                }
+            },
+            "dependsOn": []
+        },
+        {
+            "type": "Microsoft.Network/networkSecurityGroups/securityRules",
+            "name": "[concat(parameters('networkSecurityGroups_ASAv_01_SecurityGroup_name'), '/', parameters('securityRules_SSH_Rule_name'))]",
+            "apiVersion": "2018-08-01",
+            "scale": null,
+            "properties": {
+                "provisioningState": "Succeeded",
+                "description": "Allow SSH",
+                "protocol": "Tcp",
+                "sourcePortRange": "*",
+                "destinationPortRange": "22",
+                "sourceAddressPrefix": "*",
+                "destinationAddressPrefix": "*",
+                "access": "Allow",
+                "priority": 100,
+                "direction": "Inbound",
+                "sourcePortRanges": [],
+                "destinationPortRanges": [],
+                "sourceAddressPrefixes": [],
+                "destinationAddressPrefixes": []
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroups_ASAv_01_SecurityGroup_name'))]"
+            ]
+        },
+        {
+            "type": "Microsoft.Network/networkSecurityGroups/securityRules",
+            "name": "[concat(parameters('networkSecurityGroups_ASAv_01_SecurityGroup_name'), '/', parameters('securityRules_UDP_Rule1_name'))]",
+            "apiVersion": "2018-08-01",
+            "scale": null,
+            "properties": {
+                "provisioningState": "Succeeded",
+                "description": "Allow UDP",
+                "protocol": "Udp",
+                "sourcePortRange": "*",
+                "destinationPortRange": "500",
+                "sourceAddressPrefix": "*",
+                "destinationAddressPrefix": "*",
+                "access": "Allow",
+                "priority": 101,
+                "direction": "Inbound",
+                "sourcePortRanges": [],
+                "destinationPortRanges": [],
+                "sourceAddressPrefixes": [],
+                "destinationAddressPrefixes": []
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroups_ASAv_01_SecurityGroup_name'))]"
+            ]
+        },
+        {
+            "type": "Microsoft.Network/networkSecurityGroups/securityRules",
+            "name": "[concat(parameters('networkSecurityGroups_ASAv_01_SecurityGroup_name'), '/', parameters('securityRules_UDP_Rule2_name'))]",
+            "apiVersion": "2018-08-01",
+            "scale": null,
+            "properties": {
+                "provisioningState": "Succeeded",
+                "description": "Allow UDP",
+                "protocol": "Udp",
+                "sourcePortRange": "*",
+                "destinationPortRange": "4500",
+                "sourceAddressPrefix": "*",
+                "destinationAddressPrefix": "*",
+                "access": "Allow",
+                "priority": 102,
+                "direction": "Inbound",
+                "sourcePortRanges": [],
+                "destinationPortRanges": [],
+                "sourceAddressPrefixes": [],
+                "destinationAddressPrefixes": []
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroups_ASAv_01_SecurityGroup_name'))]"
+            ]
+        },
+        {
+            "type": "Microsoft.Network/virtualNetworks/subnets",
+            "name": "[concat(parameters('virtualNetworks_vnet01_name'), '/', parameters('subnets_management_name'))]",
+            "apiVersion": "2018-08-01",
+            "scale": null,
+            "properties": {
+                "provisioningState": "Succeeded",
+                "addressPrefix": "10.1.0.0/24",
+                "routeTable": {
+                    "id": "[resourceId('Microsoft.Network/routeTables', parameters('routeTables_management_ASAv_RouteTable_name'))]"
+                },
+                "delegations": []
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetworks_vnet01_name'))]",
+                "[resourceId('Microsoft.Network/routeTables', parameters('routeTables_management_ASAv_RouteTable_name'))]"
+            ]
+        },
+        {
+            "type": "Microsoft.Network/virtualNetworks/subnets",
+            "name": "[concat(parameters('virtualNetworks_vnet01_name'), '/', parameters('subnets_inside_name'))]",
+            "apiVersion": "2018-08-01",
+            "scale": null,
+            "properties": {
+                "provisioningState": "Succeeded",
+                "addressPrefix": "10.1.1.0/24",
+                "routeTable": {
+                    "id": "[resourceId('Microsoft.Network/routeTables', parameters('routeTables_inside_ASAv_RouteTable_name'))]"
+                },
+                "delegations": []
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetworks_vnet01_name'))]",
+                "[resourceId('Microsoft.Network/routeTables', parameters('routeTables_inside_ASAv_RouteTable_name'))]"
+            ]
+        },
+        {
+            "type": "Microsoft.Network/virtualNetworks/subnets",
+            "name": "[concat(parameters('virtualNetworks_vnet01_name'), '/', parameters('subnets_dmz1_name'))]",
+            "apiVersion": "2018-08-01",
+            "scale": null,
+            "properties": {
+                "provisioningState": "Succeeded",
+                "addressPrefix": "10.1.2.0/24",
+                "routeTable": {
+                    "id": "[resourceId('Microsoft.Network/routeTables', parameters('routeTables_dmz1_ASAv_RouteTable_name'))]"
+                },
+                "delegations": []
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetworks_vnet01_name'))]",
+                "[resourceId('Microsoft.Network/routeTables', parameters('routeTables_dmz1_ASAv_RouteTable_name'))]"
+            ]
+        },
+        {
+            "type": "Microsoft.Network/virtualNetworks/subnets",
+            "name": "[concat(parameters('virtualNetworks_vnet01_name'), '/', parameters('subnets_dmz2_name'))]",
+            "apiVersion": "2018-08-01",
+            "scale": null,
+            "properties": {
+                "provisioningState": "Succeeded",
+                "addressPrefix": "10.1.3.0/24",
+                "routeTable": {
+                    "id": "[resourceId('Microsoft.Network/routeTables', parameters('routeTables_dmz2_ASAv_RouteTable_name'))]"
+                },
+                "delegations": []
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetworks_vnet01_name'))]",
+                "[resourceId('Microsoft.Network/routeTables', parameters('routeTables_dmz2_ASAv_RouteTable_name'))]"
+            ]
+        }
+    ]
+}

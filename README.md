@@ -1,6 +1,6 @@
 asav-test-template
 ==================
-Sample of Microsoft Azure - ARM Template to deploy Cisco ASAv.
+Sample of Microsoft Azure - ARM Template to deploy Cisco ASAv with related Azure Resource.
 
 ## Requirements
 Existing Resource Group in MS Azure Emvironment

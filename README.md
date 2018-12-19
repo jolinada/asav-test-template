@@ -6,7 +6,9 @@ Sample of Microsoft Azure - ARM Template to deploy Cisco ASAv with related Azure
 Existing Resource Group, Storage Account in MS Azure Emvironment
 
 ## Installation
-Copy all the json script (asav-test-template.json) to your newly added ARM Template section in Microsoft Azure
+1. Copy all the json script (asav-test-template.json) to your newly added ARM Template section in Azure Portal
+2. Configuration
+3. Deploy from Template
 
 ## Configuration
 Modify each parameter for your Cisco ASAv deployment in MS Azure.

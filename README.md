@@ -11,7 +11,7 @@ Copy all the json script (asav-test-template.json) to your newly added ARM Templ
 ## Configuration
 Modify each parameter for your Cisco ASAv deployment in MS Azure.
 
-	"virtualNetworks_vnet01_name": {
+	"virtualNetworks_name": {
             "defaultValue": "(your VNET name)", 
 		"addressSpace": {
                     "addressPrefixes": [

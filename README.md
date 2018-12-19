@@ -3,7 +3,7 @@ asav-test-template
 Sample of Microsoft Azure - ARM Template to deploy Cisco ASAv with related Azure Resource.
 
 ## Requirements
-Existing Resource Group in MS Azure Emvironment
+Existing Resource Group, Storage Account in MS Azure Emvironment
 
 ## Installation
 Copy all the json script (asav-test-template.json) to your newly added ARM Template section in Microsoft Azure
@@ -20,7 +20,7 @@ Modify each parameter for your Cisco ASAv deployment in MS Azure.
 	"virtualMachines_ASAv_01_name": {
             "defaultValue": "(your ASAv VM name)" ,
 
-	"storageAccounts_shkimura_name": {
+	"storageAccounts_name": {
             "defaultValue": "(your Storage account name)",
 
 	"networkInterfaces_ASAv_01_Nic[0-3]_name": {
@@ -31,7 +31,7 @@ Modify each parameter for your Cisco ASAv deployment in MS Azure.
 	"routeTables_(interface name)_ASAv_RouteTable_name": {
             "defaultValue": "(your ASAv Route Table name)",
             
-	"publicIPAddresses_PIP_001_name": {
+	"publicIPAddresses_name": {
             "defaultValue": "(your Public IP address name)",
             
 	"networkSecurityGroups_ASAv_01_SecurityGroup_name": {

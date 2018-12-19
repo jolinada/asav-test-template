@@ -17,7 +17,7 @@ Modify each parameter for your Cisco ASAv deployment in MS Azure.
                     "addressPrefixes": [
                         "(your VNET IP address prefix : "10.1.0.0/16")"
 												
-	"virtualMachines_ASAv_01_name": {
+	"virtualMachines_ASAv_name": {
             "defaultValue": "(your ASAv VM name)" ,
 
 	"storageAccounts_name": {

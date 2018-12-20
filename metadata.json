@@ -1,0 +1,9 @@
+{
+  "$schema": "https://aka.ms/azure-quickstart-templates-metadata-schema#",
+  "type": "QuickStart",
+  "itemDisplayName": "asav-test-template",
+  "description": "Sample of Microsoft Azure - ARM Template to deploy Cisco ASAv. ",
+  "summary": "Sample of Microsoft Azure - ARM Template to deploy Cisco ASAv with related Azure Resource.",
+  "githubUsername": "sig666",
+  "dateUpdated": "2018-12-20"
+}

@@ -3,84 +3,64 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "virtualNetworks_vnet01_name": {
-            "defaultValue": "vnet05",
-            "type": "String"
+            "value": "vnet05"
         },
         "virtualMachines_ASAv_name": {
-            "defaultValue": "ASAv-05",
-            "type": "String"
+            "value": "ASAv-05"
         },
         "storageAccounts_name": {
-            "defaultValue": "shkimura",
-            "type": "String"
+            "value": "shkimura"
         },
         "publicIPAddresses_name": {
-            "defaultValue": "PIP-005",
-            "type": "String"
+            "value": "PIP-005"
         },
         "networkInterfaces_ASAv_01_Nic0_name": {
-            "defaultValue": "ASAv-05-Nic0",
-            "type": "String"
+            "value": "ASAv-05-Nic0"
         },
         "networkInterfaces_ASAv_01_Nic1_name": {
-            "defaultValue": "ASAv-05-Nic1",
-            "type": "String"
+            "value": "ASAv-05-Nic1"
         },
         "networkInterfaces_ASAv_01_Nic2_name": {
-            "defaultValue": "ASAv-05-Nic2",
-            "type": "String"
+            "value": "ASAv-05-Nic2"
         },
         "networkInterfaces_ASAv_01_Nic3_name": {
-            "defaultValue": "ASAv-05-Nic3",
-            "type": "String"
+            "value": "ASAv-05-Nic3"
         },
         "routeTables_dmz1_ASAv_RouteTable_name": {
-            "defaultValue": "dmz1-ASAv05-RouteTable",
-            "type": "String"
+            "value": "dmz1-ASAv05-RouteTable"
         },
         "routeTables_dmz2_ASAv_RouteTable_name": {
-            "defaultValue": "dmz2-ASAv05-RouteTable",
-            "type": "String"
+            "value": "dmz2-ASAv05-RouteTable"
         },
         "routeTables_inside_ASAv_RouteTable_name": {
-            "defaultValue": "inside-ASAv05-RouteTable",
-            "type": "String"
+            "value": "inside-ASAv05-RouteTable"
         },
         "subnets_dmz1_name": {
-            "defaultValue": "dmz1",
-            "type": "String"
+            "value": "dmz1"
         },
         "subnets_dmz2_name": {
-            "defaultValue": "dmz2",
-            "type": "String"
+            "value": "dmz2"
         },
         "subnets_inside_name": {
-            "defaultValue": "inside",
-            "type": "String"
+            "value": "inside"
         },
         "routeTables_management_ASAv_RouteTable_name": {
-            "defaultValue": "management-ASAv05-RouteTable",
-            "type": "String"
+            "value": "management-ASAv05-RouteTable"
         },
         "subnets_management_name": {
-            "defaultValue": "management",
-            "type": "String"
+            "value": "management"
         },
         "networkSecurityGroups_ASAv_01_SecurityGroup_name": {
-            "defaultValue": "ASAv-05-SecurityGroup",
-            "type": "String"
+            "value": "ASAv-05-SecurityGroup"
         },
         "securityRules_SSH_Rule_name": {
-            "defaultValue": "SSH-Rule",
-            "type": "String"
+            "value": "SSH-Rule"
         },
         "securityRules_UDP_Rule1_name": {
-            "defaultValue": "UDP-Rule1",
-            "type": "String"
+            "value": "UDP-Rule1"
         },
         "securityRules_UDP_Rule2_name": {
-            "defaultValue": "UDP-Rule2",
-            "type": "String"
+            "value": "UDP-Rule2"
         }
     }
 }

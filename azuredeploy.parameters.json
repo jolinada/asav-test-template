@@ -1,0 +1,86 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "virtualNetworks_vnet01_name": {
+            "defaultValue": "vnet05",
+            "type": "String"
+        },
+        "virtualMachines_ASAv_name": {
+            "defaultValue": "ASAv-05",
+            "type": "String"
+        },
+        "storageAccounts_name": {
+            "defaultValue": "shkimura",
+            "type": "String"
+        },
+        "publicIPAddresses_name": {
+            "defaultValue": "PIP-005",
+            "type": "String"
+        },
+        "networkInterfaces_ASAv_01_Nic0_name": {
+            "defaultValue": "ASAv-05-Nic0",
+            "type": "String"
+        },
+        "networkInterfaces_ASAv_01_Nic1_name": {
+            "defaultValue": "ASAv-05-Nic1",
+            "type": "String"
+        },
+        "networkInterfaces_ASAv_01_Nic2_name": {
+            "defaultValue": "ASAv-05-Nic2",
+            "type": "String"
+        },
+        "networkInterfaces_ASAv_01_Nic3_name": {
+            "defaultValue": "ASAv-05-Nic3",
+            "type": "String"
+        },
+        "routeTables_dmz1_ASAv_RouteTable_name": {
+            "defaultValue": "dmz1-ASAv05-RouteTable",
+            "type": "String"
+        },
+        "routeTables_dmz2_ASAv_RouteTable_name": {
+            "defaultValue": "dmz2-ASAv05-RouteTable",
+            "type": "String"
+        },
+        "routeTables_inside_ASAv_RouteTable_name": {
+            "defaultValue": "inside-ASAv05-RouteTable",
+            "type": "String"
+        },
+        "subnets_dmz1_name": {
+            "defaultValue": "dmz1",
+            "type": "String"
+        },
+        "subnets_dmz2_name": {
+            "defaultValue": "dmz2",
+            "type": "String"
+        },
+        "subnets_inside_name": {
+            "defaultValue": "inside",
+            "type": "String"
+        },
+        "routeTables_management_ASAv_RouteTable_name": {
+            "defaultValue": "management-ASAv05-RouteTable",
+            "type": "String"
+        },
+        "subnets_management_name": {
+            "defaultValue": "management",
+            "type": "String"
+        },
+        "networkSecurityGroups_ASAv_01_SecurityGroup_name": {
+            "defaultValue": "ASAv-05-SecurityGroup",
+            "type": "String"
+        },
+        "securityRules_SSH_Rule_name": {
+            "defaultValue": "SSH-Rule",
+            "type": "String"
+        },
+        "securityRules_UDP_Rule1_name": {
+            "defaultValue": "UDP-Rule1",
+            "type": "String"
+        },
+        "securityRules_UDP_Rule2_name": {
+            "defaultValue": "UDP-Rule2",
+            "type": "String"
+        }
+    }
+}

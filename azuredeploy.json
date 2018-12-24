@@ -121,8 +121,8 @@
                 },
                 "osProfile": {
                     "computerName": "[parameters('virtualMachines_ASAv_name')]",
-                    "adminUsername": "shkimura",
-                    "adminPassword": "C1sc0^&123**",
+                    "adminUsername": "admin",
+                    "adminPassword": "admin-password",
                     "linuxConfiguration": {
                         "disablePasswordAuthentication": false,
                         "provisionVMAgent": true
